@@ -1,0 +1,6 @@
+name: Life
+version: '${project.version}'
+main: xyz.hafemann.life.Life
+api-version: '1.20'
+authors: [SLH]
+description: A Minecraft plugin implementing mechanics of the Life Series by Grian.
