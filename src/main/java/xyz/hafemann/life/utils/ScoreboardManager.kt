@@ -8,7 +8,7 @@ import xyz.hafemann.life.utils.LifeManager.refreshLives
 object ScoreboardManager {
     fun setupLives() {
         if (Life.scoreboard.getObjective("lives") == null) {
-            Life.scoreboard.registerNewObjective("lives", Criteria.DUMMY, Component.text("Lives"))
+            Life.scoreboard.registerNewObjective("lives", Criteria.DUMMY, Component.translatable("lives"))
         }
 
         for (life in Lives.entries) {
