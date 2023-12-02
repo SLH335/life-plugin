@@ -8,11 +8,11 @@ import xyz.hafemann.life.Life
 import kotlin.math.max
 
 enum class Lives(val value: Int, val title: String, val color: NamedTextColor) {
-    DARK_GREEN(4, "dark_green", NamedTextColor.DARK_GREEN),
-    GREEN(3, "green", NamedTextColor.GREEN),
-    YELLOW(2, "yellow", NamedTextColor.YELLOW),
+    DEAD(0, "gray", NamedTextColor.GRAY),
     RED(1, "red", NamedTextColor.RED),
-    DEAD(0, "gray", NamedTextColor.GRAY);
+    YELLOW(2, "yellow", NamedTextColor.YELLOW),
+    GREEN(3, "green", NamedTextColor.GREEN),
+    DARK_GREEN(4, "dark_green", NamedTextColor.DARK_GREEN);
 
     companion object {
         fun byValue(value: Int): Lives {
@@ -31,9 +31,10 @@ object LifeManager {
         val lives = lives()
 
         for (life in Lives.entries) {
-            if (life.value > lives) break
-            if (this !is Player) break
+            if (life.value > lives) continue
+            if (this !is Player) continue
             displayName(Component.text(name).color(life.color))
+            Life.scoreboard.getTeam(life.title)!!.addPlayer(this)
         }
     }
 
