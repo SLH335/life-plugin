@@ -6,6 +6,7 @@ import net.kyori.adventure.translation.TranslationRegistry
 import net.kyori.adventure.util.UTF8ResourceBundleControl
 import org.bukkit.plugin.java.JavaPlugin
 import org.bukkit.scoreboard.Scoreboard
+import xyz.hafemann.life.commands.LivesCommand
 import xyz.hafemann.life.utils.ScoreboardManager
 import java.util.*
 
@@ -17,6 +18,7 @@ class Life : JavaPlugin() {
 
         registerTranslations()
         setupScoreboard()
+        registerCommands()
     }
 
     private fun registerTranslations() {
@@ -33,6 +35,10 @@ class Life : JavaPlugin() {
 
     private fun setupScoreboard() {
         ScoreboardManager.setupLives()
+    }
+
+    private fun registerCommands() {
+        LivesCommand.register()
     }
 
     override fun onDisable() {

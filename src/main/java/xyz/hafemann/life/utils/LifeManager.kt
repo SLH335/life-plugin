@@ -12,7 +12,18 @@ enum class Lives(val value: Int, val title: String, val color: NamedTextColor) {
     GREEN(3, "green", NamedTextColor.GREEN),
     YELLOW(2, "yellow", NamedTextColor.YELLOW),
     RED(1, "red", NamedTextColor.RED),
-    DEAD(0, "gray", NamedTextColor.GRAY)
+    DEAD(0, "gray", NamedTextColor.GRAY);
+
+    companion object {
+        fun byValue(value: Int): Lives {
+            for (life in Lives.entries) {
+                if (life.value == value) {
+                    return life
+                }
+            }
+            return DARK_GREEN
+        }
+    }
 }
 
 object LifeManager {
@@ -30,6 +41,10 @@ object LifeManager {
         val objective = Life.scoreboard.getObjective("lives")
         val score = objective!!.getScore(this)
         return score.score
+    }
+
+    fun OfflinePlayer.life(): Lives {
+        return Lives.byValue(lives())
     }
 
     fun OfflinePlayer.lives(lives: Int) {
