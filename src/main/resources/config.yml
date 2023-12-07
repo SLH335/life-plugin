@@ -1,0 +1,6 @@
+game:
+  session_duration: 120
+  break_duration: 15
+  map_size: 700
+  lives: 3
+  shutdown_after_session: false

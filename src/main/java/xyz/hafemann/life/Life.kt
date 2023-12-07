@@ -4,9 +4,12 @@ import net.kyori.adventure.key.Key
 import net.kyori.adventure.translation.GlobalTranslator
 import net.kyori.adventure.translation.TranslationRegistry
 import net.kyori.adventure.util.UTF8ResourceBundleControl
+import org.bukkit.Location
 import org.bukkit.plugin.java.JavaPlugin
 import org.bukkit.scoreboard.Scoreboard
+import xyz.hafemann.life.commands.GameCommand
 import xyz.hafemann.life.commands.LivesCommand
+import xyz.hafemann.life.commands.SessionCommand
 import xyz.hafemann.life.listeners.PlayerDeathListener
 import xyz.hafemann.life.utils.ScoreboardManager
 import java.util.*
@@ -17,6 +20,7 @@ class Life : JavaPlugin() {
         instance = this
         scoreboard = server.scoreboardManager.mainScoreboard
 
+        setupConfig()
         registerTranslations()
         setupScoreboard()
         registerCommands()
@@ -35,12 +39,21 @@ class Life : JavaPlugin() {
         GlobalTranslator.translator().addSource(registry)
     }
 
+    private fun setupConfig() {
+        saveResource("config.yml", false);
+        saveDefaultConfig();
+        config.set("spawn", Location(server.getWorld("world"), 0.0, 0.0, 0.0))
+        saveConfig()
+    }
+
     private fun setupScoreboard() {
         ScoreboardManager.setupLives()
     }
 
     private fun registerCommands() {
         LivesCommand.register()
+        GameCommand.register()
+        SessionCommand.register()
     }
 
     private fun registerListeners() {
