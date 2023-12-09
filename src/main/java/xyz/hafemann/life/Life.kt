@@ -11,6 +11,7 @@ import org.bukkit.scoreboard.Scoreboard
 import xyz.hafemann.life.commands.GameCommand
 import xyz.hafemann.life.commands.LivesCommand
 import xyz.hafemann.life.commands.SessionCommand
+import xyz.hafemann.life.listeners.EntityDeathListener
 import xyz.hafemann.life.listeners.PlayerDeathListener
 import xyz.hafemann.life.utils.RecipeManager
 import xyz.hafemann.life.utils.ScoreboardManager
@@ -62,6 +63,7 @@ class Life : JavaPlugin() {
 
     private fun registerListeners() {
         server.pluginManager.registerEvents(PlayerDeathListener(), this)
+        server.pluginManager.registerEvents(EntityDeathListener(), this)
     }
 
     private fun registerRecipes() {
