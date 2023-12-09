@@ -5,6 +5,7 @@ import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.format.NamedTextColor
 import org.bukkit.entity.Player
 import xyz.hafemann.life.Life
+import xyz.hafemann.life.utils.BoogeyManager
 import xyz.hafemann.life.utils.GameManager
 
 object GameCommand {
@@ -39,10 +40,17 @@ object GameCommand {
             }
         }
 
+        val gameChooseBoogey = subcommand("chooseboogey") {
+            anyExecutor {_, _ ->
+                BoogeyManager.chooseBoogeyman(0)
+            }
+        }
+
         commandAPICommand("game") {
             withPermission("life.admin")
             subcommand(gameStart)
             subcommand(gameSetSpawn)
+            subcommand(gameChooseBoogey)
         }
     }
 }
