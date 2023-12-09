@@ -21,4 +21,10 @@ object ScoreboardManager {
             player.refreshLives()
         }
     }
+
+    fun setupBoogey() {
+        if (Life.scoreboard.getObjective("boogey") == null) {
+            Life.scoreboard.registerNewObjective("boogey", Criteria.DUMMY, Component.translatable("boogey"))
+        }
+    }
 }

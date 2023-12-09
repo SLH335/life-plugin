@@ -10,6 +10,8 @@ import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.entity.PlayerDeathEvent
 import xyz.hafemann.life.Life
+import xyz.hafemann.life.utils.BoogeyManager.clearBoogeyman
+import xyz.hafemann.life.utils.BoogeyManager.isBoogeyman
 import xyz.hafemann.life.utils.LifeManager.lives
 import xyz.hafemann.life.utils.LifeManager.removeLife
 import xyz.hafemann.life.utils.Utility
@@ -47,6 +49,20 @@ class PlayerDeathListener: Listener {
                         Component.translatable("lives.eliminated.subtitle")))
                 }
             }
+        }
+
+        // handle boogeyman kill
+        val killer = player.killer
+        if (killer != null) {
+            if (!killer.isBoogeyman() || killer == player) return
+
+            killer.clearBoogeyman()
+            killer.showTitle(Title.title(
+                Component.translatable("boogey.task.success.self.title").color(NamedTextColor.GREEN),
+                Component.translatable("boogey.task.success.self.subtitle")))
+
+            Life.instance.server.broadcast(Component.translatable("boogey.task.success.other", killer.displayName())
+                .color(NamedTextColor.WHITE))
         }
     }
 }

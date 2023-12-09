@@ -51,6 +51,7 @@ class Life : JavaPlugin() {
 
     private fun setupScoreboard() {
         ScoreboardManager.setupLives()
+        ScoreboardManager.setupBoogey()
     }
 
     private fun registerCommands() {

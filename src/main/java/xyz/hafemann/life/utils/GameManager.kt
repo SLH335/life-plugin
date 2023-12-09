@@ -6,6 +6,8 @@ import net.kyori.adventure.title.Title
 import org.bukkit.Bukkit
 import org.bukkit.GameMode
 import xyz.hafemann.life.Life
+import xyz.hafemann.life.utils.BoogeyManager.failBoogeyman
+import xyz.hafemann.life.utils.BoogeyManager.isBoogeyman
 import xyz.hafemann.life.utils.LifeManager.lives
 
 object GameManager {
@@ -67,10 +69,12 @@ object GameManager {
                 }
             }
             gameTimer--
-        }, 0, 20) // run once per second
+        }, 0, 2) // run once per second
     }
 
     fun startSession() {
+        BoogeyManager.chooseBoogeyman(5*60)
+
         val sessionDuration = Life.instance.config.getInt("game.session_duration")
         val breakDuration = Life.instance.config.getInt("game.break_duration")
         val shutdownAfterSession = Life.instance.config.getBoolean("game.shutdown_after_session")
@@ -165,6 +169,16 @@ object GameManager {
                     Life.instance.server.broadcast(
                         Component.translatable("session.end").color(NamedTextColor.RED)
                         .append(Component.translatable("session.close.soon", Component.text(5))))
+
+                    for (player in Life.instance.server.onlinePlayers) {
+                        player.showTitle(Title.title(
+                            Component.translatable("session.end").color(NamedTextColor.RED),
+                            Component.translatable("session.close.soon", Component.text(5))))
+
+                        if (player.isBoogeyman()) {
+                            player.failBoogeyman()
+                        }
+                    }
                 }
                 -4 -> {
                     Life.instance.server.broadcast(
@@ -182,6 +196,6 @@ object GameManager {
                 }
             }
             sessionTimer--
-        }, 0, 20*60) // run once per minute
+        }, 0, 20*2) // run once per minute
     }
 }
