@@ -22,7 +22,7 @@ object BoogeyCommand {
             }
         }
 
-        commandAPICommand("game") {
+        commandAPICommand("boogey") {
             withPermission("life.admin")
             subcommand(boogeyChoose)
             subcommand(boogeySucceed)
