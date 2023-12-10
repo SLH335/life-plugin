@@ -69,7 +69,7 @@ object GameManager {
                 }
             }
             gameTimer--
-        }, 0, 2) // run once per second
+        }, 0, 20) // run once per second
     }
 
     fun startSession() {
@@ -196,6 +196,6 @@ object GameManager {
                 }
             }
             sessionTimer--
-        }, 0, 20*2) // run once per minute
+        }, 0, 20*60) // run once per minute
     }
 }

@@ -69,13 +69,11 @@ object BoogeyManager {
                     Life.instance.server.broadcast(
                         Component.translatable("boogey.choice.soon",
                         Component.text(5)).color(NamedTextColor.RED))
-                    boogeyTimer = 61
                 }
                 60 -> {
                     Life.instance.server.broadcast(
                         Component.translatable("boogey.choice.one")
                         .color(NamedTextColor.RED))
-                    boogeyTimer = 1
                 }
                 0 -> {
                     Life.instance.server.broadcast(
