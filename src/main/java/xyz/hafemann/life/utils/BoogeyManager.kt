@@ -5,6 +5,8 @@ import net.kyori.adventure.text.format.NamedTextColor
 import net.kyori.adventure.title.Title
 import org.bukkit.OfflinePlayer
 import org.bukkit.entity.Player
+import org.bukkit.potion.PotionEffect
+import org.bukkit.potion.PotionEffectType
 import xyz.hafemann.life.Life
 import xyz.hafemann.life.utils.LifeManager.lives
 import kotlin.random.Random
@@ -25,6 +27,38 @@ object BoogeyManager {
     fun OfflinePlayer.clearBoogeyman() {
         val boogeyScore = Life.scoreboard.getObjective("boogey")!!.getScore(this)
         boogeyScore.score = 0
+    }
+
+    fun Player.failBoogeyman() {
+        if (!isBoogeyman()) return
+
+        clearBoogeyman()
+        lives(1)
+
+        for (current in Life.instance.server.onlinePlayers) {
+            if (current == this) {
+                current.sendMessage(Component.translatable("boogey.task.failure.self"))
+            } else {
+                current.sendMessage(Component.translatable("boogey.task.failure.other",
+                    displayName()))
+            }
+        }
+    }
+
+    fun Player.succeedBoogeyman() {
+        if (!isBoogeyman()) return
+
+        clearBoogeyman()
+        addPotionEffect(PotionEffect(PotionEffectType.ABSORPTION, 15, 1))
+        addPotionEffect(PotionEffect(PotionEffectType.REGENERATION, 30, 1))
+        addPotionEffect(PotionEffect(PotionEffectType.FIRE_RESISTANCE, 30, 1))
+
+        showTitle(Title.title(
+            Component.translatable("boogey.task.success.self.title").color(NamedTextColor.GREEN),
+            Component.translatable("boogey.task.success.self.subtitle")))
+
+        Life.instance.server.broadcast(Component.translatable("boogey.task.success.other", displayName())
+            .color(NamedTextColor.WHITE))
     }
 
     fun chooseBoogeyman(timer: Int) {
@@ -105,21 +139,5 @@ object BoogeyManager {
             }
             boogeyTimer--
         }, 5*60*20 - 5*60*20, 20)
-    }
-
-    fun Player.failBoogeyman() {
-        if (!isBoogeyman()) return
-
-        clearBoogeyman()
-        lives(1)
-
-        for (current in Life.instance.server.onlinePlayers) {
-            if (current == this) {
-                current.sendMessage(Component.translatable("boogey.task.failure.self"))
-            } else {
-                current.sendMessage(Component.translatable("boogey.task.failure.other",
-                    displayName()))
-            }
-        }
     }
 }

@@ -40,17 +40,10 @@ object GameCommand {
             }
         }
 
-        val gameChooseBoogey = subcommand("chooseboogey") {
-            anyExecutor {_, _ ->
-                BoogeyManager.chooseBoogeyman(0)
-            }
-        }
-
         commandAPICommand("game") {
             withPermission("life.admin")
             subcommand(gameStart)
             subcommand(gameSetSpawn)
-            subcommand(gameChooseBoogey)
         }
     }
 }
