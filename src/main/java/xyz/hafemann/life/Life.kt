@@ -8,6 +8,7 @@ import org.bukkit.Bukkit
 import org.bukkit.Location
 import org.bukkit.plugin.java.JavaPlugin
 import org.bukkit.scoreboard.Scoreboard
+import xyz.hafemann.life.commands.BoogeyCommand
 import xyz.hafemann.life.commands.GameCommand
 import xyz.hafemann.life.commands.LivesCommand
 import xyz.hafemann.life.commands.SessionCommand
@@ -59,6 +60,7 @@ class Life : JavaPlugin() {
         LivesCommand.register()
         GameCommand.register()
         SessionCommand.register()
+        BoogeyCommand.register()
     }
 
     private fun registerListeners() {
