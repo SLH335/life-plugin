@@ -13,7 +13,7 @@ object BoogeyCommand {
             }
         }
 
-        val boogeyClear = subcommand("clear") {
+        val boogeySucceed = subcommand("succeed") {
             playerArgument("player")
             anyExecutor { _, args ->
                 val player = args["player"] as Player
@@ -25,7 +25,7 @@ object BoogeyCommand {
         commandAPICommand("game") {
             withPermission("life.admin")
             subcommand(boogeyChoose)
-            subcommand(boogeyClear)
+            subcommand(boogeySucceed)
         }
     }
 }
