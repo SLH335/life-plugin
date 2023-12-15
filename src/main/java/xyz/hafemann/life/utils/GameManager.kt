@@ -155,6 +155,11 @@ object GameManager {
                                 .translatable("session.remaining", Component.text(sessionDuration/2))))
                     }
                 }
+                in intArrayOf(10, 20, 30, 60, 90, 120) -> {
+                    Life.instance.server.broadcast(
+                        Component.translatable("session.remaining",
+                            Component.text(sessionTimer).color(NamedTextColor.YELLOW)))
+                }
                 5 -> {
                     Life.instance.server.broadcast(
                         Component.translatable("session.end.soon",
