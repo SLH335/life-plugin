@@ -173,7 +173,8 @@ object GameManager {
                 0 -> {
                     Life.instance.server.broadcast(
                         Component.translatable("session.end").color(NamedTextColor.RED)
-                        .append(Component.translatable("session.close.soon", Component.text(5))))
+                        .append(Component.space().append(Component.translatable("session.close.soon",
+                            Component.text(5)))))
 
                     for (player in Life.instance.server.onlinePlayers) {
                         player.showTitle(Title.title(
