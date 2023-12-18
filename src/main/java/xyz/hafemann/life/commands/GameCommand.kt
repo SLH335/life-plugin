@@ -25,7 +25,7 @@ object GameCommand {
                     }
                 }
 
-                GameManager.startGame()
+                GameManager.startGame(5)
             }
         }
 

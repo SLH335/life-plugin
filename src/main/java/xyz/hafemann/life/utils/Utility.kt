@@ -60,4 +60,14 @@ object Utility {
 
         return head
     }
+
+    // get timestamp from seconds
+    fun timestamp(secondsPlayed: Int): String {
+        val hours = secondsPlayed / 60 / 60
+        val minutes = secondsPlayed / 60 - hours * 60
+        val seconds = secondsPlayed % 60
+
+        return "$hours:${minutes.toString().padStart(2, '0')}:" +
+                seconds.toString().padStart(2, '0')
+    }
 }
