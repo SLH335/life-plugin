@@ -46,7 +46,7 @@ object GameManager {
                         Component.translatable("game.start.one")
                             .color(NamedTextColor.YELLOW))
                 }
-                0,-2,-4,-6,-8 -> {
+                0, -2, -4, -6, -8 -> {
                     val countdown = gameTimer / 2 + 5
                     val color = when (countdown) {
                         1 -> NamedTextColor.RED
@@ -248,7 +248,7 @@ object GameManager {
                         for (player in Life.instance.server.onlinePlayers) {
                             player.kick(Component.translatable("session.end"))
                         }
-                        if (shutdownAfterSession == true) {
+                        if (shutdownAfterSession) {
                             Bukkit.shutdown()
                         }
                     }

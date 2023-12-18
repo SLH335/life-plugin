@@ -33,6 +33,16 @@ object Utility {
         return profile
     }
 
+    // get timestamp from seconds
+    private fun timestamp(secondsPlayed: Int): String {
+        val hours = secondsPlayed / 60 / 60
+        val minutes = secondsPlayed / 60 - hours * 60
+        val seconds = secondsPlayed % 60
+
+        return "$hours:${minutes.toString().padStart(2, '0')}:" +
+                seconds.toString().padStart(2, '0')
+    }
+
     // get player head item with optional killer message
     fun Player.head(killer: Player? = null): ItemStack {
         val skinUrl = playerProfile.textures.skin.toString()
@@ -62,22 +72,12 @@ object Utility {
         return head
     }
 
-    // get timestamp from seconds
-    fun timestamp(secondsPlayed: Int): String {
-        val hours = secondsPlayed / 60 / 60
-        val minutes = secondsPlayed / 60 - hours * 60
-        val seconds = secondsPlayed % 60
-
-        return "$hours:${minutes.toString().padStart(2, '0')}:" +
-                seconds.toString().padStart(2, '0')
-    }
-
     // send tab list to all online players
     fun sendTablist(secondsRemaining: Int) {
         for (player in Life.instance.server.onlinePlayers) {
             player.sendPlayerListHeaderAndFooter(
                 Component.text("Life SMP").color(NamedTextColor.GREEN).decorate(TextDecoration.BOLD),
-                Component.text(Utility.timestamp(secondsRemaining)).color(NamedTextColor.YELLOW)
+                Component.text(timestamp(secondsRemaining)).color(NamedTextColor.YELLOW)
             )
         }
     }
