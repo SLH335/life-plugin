@@ -9,6 +9,7 @@ import org.bukkit.Material
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.meta.SkullMeta
+import xyz.hafemann.life.Life
 import xyz.hafemann.life.utils.LifeManager.life
 import java.net.MalformedURLException
 import java.net.URL
@@ -69,5 +70,15 @@ object Utility {
 
         return "$hours:${minutes.toString().padStart(2, '0')}:" +
                 seconds.toString().padStart(2, '0')
+    }
+
+    // send tab list to all online players
+    fun sendTablist(secondsRemaining: Int) {
+        for (player in Life.instance.server.onlinePlayers) {
+            player.sendPlayerListHeaderAndFooter(
+                Component.text("Life SMP").color(NamedTextColor.GREEN).decorate(TextDecoration.BOLD),
+                Component.text(Utility.timestamp(secondsRemaining)).color(NamedTextColor.YELLOW)
+            )
+        }
     }
 }

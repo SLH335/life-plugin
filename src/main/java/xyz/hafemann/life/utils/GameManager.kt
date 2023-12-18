@@ -2,7 +2,6 @@ package xyz.hafemann.life.utils
 
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.format.NamedTextColor
-import net.kyori.adventure.text.format.TextDecoration
 import net.kyori.adventure.title.Title
 import org.bukkit.Bukkit
 import org.bukkit.GameMode
@@ -14,7 +13,7 @@ import xyz.hafemann.life.utils.LifeManager.lives
 object GameManager {
     private val scheduler = Life.instance.server.scheduler
 
-    fun startGame(delay: Int) {
+    fun startGame(delay: Int, sessionDuration: Int, breakDuration: Int, shutdownAfterSession: Boolean) {
         val spawn = Life.instance.config.getLocation("game.spawn") ?: return
         val mapSize = Life.instance.config.getDouble("game.map_size")
         val lives = Life.instance.config.getInt("game.lives")
@@ -28,11 +27,12 @@ object GameManager {
             player.lives(lives)
             player.gameMode = GameMode.SURVIVAL
         }
+        Utility.sendTablist(sessionDuration*60)
 
-        var gameTimer = delay
+        var gameTimer = delay * 60
         scheduler.runTaskTimer(Life.instance, { task ->
             when (gameTimer) {
-                in 61..5*60 -> {
+                !in -10..60 -> {
                     if (gameTimer % 60 == 0) {
                         val minutes = gameTimer / 60
                         Life.instance.server.broadcast(
@@ -46,43 +46,35 @@ object GameManager {
                         Component.translatable("game.start.one")
                             .color(NamedTextColor.YELLOW))
                 }
-                in 1..5 -> {
-                    val color = when (gameTimer) {
+                0,-2,-4,-6,-8 -> {
+                    val countdown = gameTimer / 2 + 5
+                    val color = when (countdown) {
                         1 -> NamedTextColor.RED
                         2 -> NamedTextColor.YELLOW
                         else -> NamedTextColor.GREEN
                     }
                     for (player in Life.instance.server.onlinePlayers) {
-                        player.showTitle(Title.title(Component.text(gameTimer)
+                        player.showTitle(Title.title(Component.text(countdown)
                             .color(color), Component.empty()))
                     }
                 }
-                0 -> {
+                -10 -> {
                     task.cancel()
                     Life.instance.server.getWorld("world")!!.worldBorder.size = mapSize
-                    startSession()
+                    startSession(sessionDuration, breakDuration, shutdownAfterSession)
                 }
             }
             gameTimer--
         }, 0, 20) // run once per second
     }
 
-    fun startSession() {
+    fun startSession(sessionDuration: Int, breakDuration: Int, shutdownAfterSession: Boolean) {
         BoogeyManager.chooseBoogeyman(5*60)
-
-        val sessionDuration = Life.instance.config.getInt("game.session_duration")
-        val breakDuration = Life.instance.config.getInt("game.break_duration")
-        val shutdownAfterSession = Life.instance.config.getBoolean("game.shutdown_after_session")
 
         var sessionTimer = (sessionDuration + breakDuration) * 60
         scheduler.runTaskTimer(Life.instance, { task ->
             if (sessionTimer > 0) {
-                for (player in Life.instance.server.onlinePlayers) {
-                    player.sendPlayerListHeaderAndFooter(
-                        Component.text("Life SMP").color(NamedTextColor.GREEN).decorate(TextDecoration.BOLD),
-                        Component.text(Utility.timestamp(sessionTimer)).color(NamedTextColor.YELLOW)
-                    )
-                }
+                Utility.sendTablist(sessionTimer)
             } else {
                 for (player in Life.instance.server.onlinePlayers) {
                     player.sendPlayerListHeaderAndFooter(Component.empty(), Component.empty())
@@ -256,7 +248,7 @@ object GameManager {
                         for (player in Life.instance.server.onlinePlayers) {
                             player.kick(Component.translatable("session.end"))
                         }
-                        if (shutdownAfterSession) {
+                        if (shutdownAfterSession == true) {
                             Bukkit.shutdown()
                         }
                     }
