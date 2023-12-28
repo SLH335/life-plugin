@@ -117,7 +117,7 @@ object BoogeyManager {
                     val boogeyIndex = Random.nextInt(playerCount)
 
                     for (i in 0..<playerCount) {
-                        val player = Life.instance.server.onlinePlayers.toList()[i]
+                        val player = Life.instance.server.onlinePlayers.toList().takeWhile { p -> p.lives() > 0 }[i]
                         if (i == boogeyIndex) {
                             player.showTitle(
                                 Title.title(
