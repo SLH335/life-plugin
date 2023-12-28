@@ -6,6 +6,7 @@ import net.kyori.adventure.translation.TranslationRegistry
 import net.kyori.adventure.util.UTF8ResourceBundleControl
 import org.bukkit.Bukkit
 import org.bukkit.Location
+import org.bukkit.World
 import org.bukkit.plugin.java.JavaPlugin
 import org.bukkit.scoreboard.Scoreboard
 import xyz.hafemann.life.commands.BoogeyCommand
@@ -23,6 +24,7 @@ class Life : JavaPlugin() {
         // Plugin startup logic
         instance = this
         scoreboard = server.scoreboardManager.mainScoreboard
+        world = server.getWorld("world")!!
 
         setupConfig()
         registerTranslations()
@@ -89,5 +91,6 @@ class Life : JavaPlugin() {
     companion object {
         lateinit var instance: JavaPlugin
         lateinit var scoreboard: Scoreboard
+        lateinit var world: World
     }
 }

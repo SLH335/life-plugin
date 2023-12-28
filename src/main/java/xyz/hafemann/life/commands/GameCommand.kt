@@ -58,10 +58,21 @@ object GameCommand {
             }
         }
 
+        val gameDeathmatch = subcommand("deathmatch") {
+            integerArgument("remaining_time")
+            playerExecutor { _, args ->
+                val remainingTime = args["remaining_time"] as Int
+                val mapSize = Life.instance.config.getInt("game.map_size")
+
+                GameManager.startDeathmatch(remainingTime, mapSize)
+            }
+        }
+
         commandAPICommand("game") {
             withPermission("life.admin")
             subcommand(gameStart)
             subcommand(gameSetSpawn)
+            subcommand(gameDeathmatch)
         }
     }
 }

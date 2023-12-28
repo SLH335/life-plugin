@@ -257,4 +257,29 @@ object GameManager {
             sessionTimer--
         }, 0, 20) // run once per second
     }
+
+    fun startDeathmatch(remainingTime: Int, mapSize: Int) {
+        val sizeReduction = (mapSize-20)/remainingTime // reduction each interval; leave 20 block diameter
+        var currentSize = mapSize
+
+        Life.instance.server.broadcast(Component.text("The deathmatch has started!").color(NamedTextColor.RED))
+
+        var currentTime = remainingTime*60 + 15 // shrink border in 15 seconds
+        scheduler.runTaskTimer(Life.instance, { task ->
+            when (currentTime % 60) {
+                10 -> {
+                    Life.instance.server.broadcast(
+                        Component.text("The border will shrink in 10 seconds").color(NamedTextColor.YELLOW))
+                }
+                0 -> {
+                    currentSize -= sizeReduction
+                    Life.world.worldBorder.setSize(currentSize.toDouble(), 10)
+                    Life.instance.server.broadcast(Component.text("The border is shrinking")
+                        .color(NamedTextColor.RED))
+                }
+            }
+            currentTime--
+            if (currentTime == 0) task.cancel()
+        }, 0, 20) // run once per second
+    }
 }
