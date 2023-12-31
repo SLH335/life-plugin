@@ -69,6 +69,7 @@ object BoogeyManager {
                     Life.instance.server.broadcast(
                         Component.translatable("boogey.choice.soon",
                         Component.text(5)).color(NamedTextColor.RED))
+                    boogeyTimer = 1
                 }
                 60 -> {
                     Life.instance.server.broadcast(
@@ -113,24 +114,34 @@ object BoogeyManager {
                     }
                 }
                 -14 -> {
-                    val playerCount = Life.instance.server.onlinePlayers.size
-                    val boogeyIndex = Random.nextInt(playerCount)
+                    val participants = Life.instance.server.onlinePlayers.toList().takeWhile { p -> p.lives() > 0 }
+                    val playerCount = participants.size
+                    val boogeyIndex = if (playerCount > 0) Random.nextInt(playerCount) else 0
 
-                    for (i in 0..<playerCount) {
-                        val player = Life.instance.server.onlinePlayers.toList().takeWhile { p -> p.lives() > 0 }[i]
-                        if (i == boogeyIndex) {
-                            player.showTitle(
-                                Title.title(
-                                    Component.translatable("boogey.role.boogey")
-                                .color(NamedTextColor.RED), Component.empty()))
-                            player.sendMessage(Component.translatable("boogey.description"))
-                            player.setBoogeyman()
-                        } else {
-                            player.showTitle(
-                                Title.title(
-                                    Component.translatable("boogey.role.not_boogey")
-                                .color(NamedTextColor.GREEN), Component.empty()))
+                    if (playerCount > 0) {
+                        for (i in 0..<playerCount) {
+                            val player = participants[i]
+                            if (i == boogeyIndex) {
+                                player.showTitle(
+                                    Title.title(
+                                        Component.translatable("boogey.role.boogey")
+                                            .color(NamedTextColor.RED), Component.empty()
+                                    )
+                                )
+                                player.sendMessage(Component.translatable("boogey.description"))
+                                player.setBoogeyman()
+                            } else {
+                                player.showTitle(
+                                    Title.title(
+                                        Component.translatable("boogey.role.not_boogey")
+                                            .color(NamedTextColor.GREEN), Component.empty()
+                                    )
+                                )
+                            }
                         }
+                    } else {
+                        Life.instance.server.broadcast(Component.text("There are no participating players " +
+                                "online, choosing a boogeyman was skipped").color(NamedTextColor.RED))
                     }
                     task.cancel()
                 }
