@@ -264,6 +264,13 @@ object GameManager {
 
         Life.instance.server.broadcast(Component.text("The deathmatch has started!").color(NamedTextColor.RED))
 
+        for (player in Life.instance.server.onlinePlayers) {
+            if (player.lives() > 1) {
+                player.lives(1)
+                player.sendMessage(Component.text("You only have one life left").color(NamedTextColor.RED))
+            }
+        }
+
         var currentTime = remainingTime*60 + 15 // shrink border in 15 seconds
         scheduler.runTaskTimer(Life.instance, { task ->
             when (currentTime % 60) {
